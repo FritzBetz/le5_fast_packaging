@@ -1,6 +1,6 @@
 # package_project.py
 
-Packages a Leadwerks 5 project into an AES-256 encrypted zip. It scans your maps and source code for referenced files, follows dependencies recursively, and packs only what is actually used.
+Packages a Leadwerks 5 project with AES-256 encryption. It scans your maps and source code for referenced files, follows dependencies recursively, and packs only what is actually used.
 
 ## Features
 

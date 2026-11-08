@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pyzipper
 
-PACKAGE_KEY = "k6f8cpOkrnhGkwIApwGKBbgrWHlYff3gMKkixPCxvPqhv9Yyc22DtSiydftPU2cx"
+PACKAGE_KEY = "gK4y4vTDf6FZRyRTzBnLpnqIHY6pYzKfZ20vAigjUjMgbTl0GkkYUyczlPLe8imW"
 
 OUTPUT_DIR = "Packages"
 

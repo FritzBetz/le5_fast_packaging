@@ -30,9 +30,7 @@ cd "D:\leadwerks\The Hallow"
 & 'D:\miniconda\python.exe' package_project.py
 ```
 
-Output: `data.zip` (name configurable) and `package_manifest.txt`.
-
-> **Untested:** Leadwerks packages are assumed to be ZIPs. Verify that the engine can open an AES-256 archive with your key (for example via `LoadPackage`) before shipping.
+Output: /packages/ folder in your project, including all the files you need to run your game as a portable .exe.
 
 ## Configuration
 

@@ -17,13 +17,13 @@ Packages a Leadwerks 5 project into an AES-256 encrypted zip. It scans your maps
 - Python 3.9+
 - `pyzipper`
 
-```powershell
-& 'D:\miniconda\python.exe' -m pip install pyzipper
-```
-
-Install it with the same interpreter you run the script with. A plain `pip` can install into a different Python.
+pyzipper needs to be installed.
+if you have issues running this file, just install pyzipper to your current environment, and run it.
 
 ## Usage
+Place this script in your project root folder, and also `cd` to your project root, then run the python file.
+
+(for example, my project name is The Hallow)
 
 ```powershell
 cd "D:\leadwerks\The Hallow"

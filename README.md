@@ -72,9 +72,11 @@ Because the `.map` format is not documented, the script does not parse it. It fi
 
 If a file name is ambiguous (several matches), all matches are included. A `X::` prefix on a path is stripped before matching.
 
-## Filters explained
+#
+#
+#
+#
 
-### Precedence
 
 # make_pass.py
 ## Password tool for `Encription.cpp` (Leadwerks)

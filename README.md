@@ -75,3 +75,77 @@ If a file name is ambiguous (several matches), all matches are included. A `X::`
 ## Filters explained
 
 ### Precedence
+
+# make_pass.py
+## Password tool for `Encription.cpp` (Leadwerks)
+
+Prints C++ code that sets your own package password in `Source/Encription.cpp`. By default, Leadwerks' own default secret is used in this repo, and that secret is public. To encrypt packages with your own secret, replace the relevant lines in `Source/Encription.cpp` (from line 9 onward) with this script's output.
+
+**If you don't plan to change your password, or you aren't sure what this does, skip this tool.**
+
+## What it does
+
+- The password is always built to exactly 64 bytes (`SIZE = 64`).
+- Shorter passwords are padded with random characters from a safe set (letters, digits and a list of punctuation that needs no escaping in C++ char literals).
+- The 64 `buffer->PokeByte(index, 'c');` lines are printed in shuffled order, so the password does not read left to right in the source.
+- A commented `Assert(...)` line prints the final password, including any padding.
+
+## Requirements
+
+- Python 3
+- No extra packages
+
+## Usage
+
+```
+python make_password.py <password> [--seed N] [--no-pad]
+```
+
+| Option | Meaning |
+|---|---|
+| `password` | ASCII only, at most 64 characters |
+| `--seed N` | Fixed seed for the line shuffle, so the same output is reproducible |
+| `--no-pad` | Refuse anything that isn't exactly 64 characters instead of padding |
+
+Without `--seed`, the order of the lines is random every run. The padding characters are always random (via `secrets`), even with `--seed`. Only the shuffle order is reproducible. To get identical output every time, use a password that is exactly 64 characters with `--no-pad` and a fixed `--seed`.
+
+## Example
+
+```
+python make_password.py "my-secret" --seed 42
+```
+
+Output (shortened):
+
+```
+buffer->PokeByte(17, 'x');
+buffer->PokeByte(3, 'c');
+...
+//Assert(s == "my-secret<55 random padding chars>");
+```
+
+## Applying it
+
+1. Run the script and copy the `PokeByte` lines.
+2. In `Source/Encription.cpp`, replace the existing lines starting at line 9 with the copied block.
+3. Keep the `//Assert(...)` line (it is a comment). The password inside it is the actual final key, including padding. Copy that value out and store it somewhere safe.
+4. Rebuild the game or engine so the new key is compiled in.
+5. Use the same final password for your packager (`PACKAGE_KEY`). If the two don't match, the game can't open the packages.
+
+## Notes and warnings
+
+- **The password in the `//Assert` line is plaintext.** Don't commit or share it. Delete that line, or the comment, before committing if the repo is public.
+- **Padding changes the key.** If you give a short password without `--no-pad`, the random padding becomes part of the key. Re-running the script later gives a different key, so save the printed one.
+- **Quote the argument properly in your shell.** Characters like `!`, `$`, `&`, `(`, `)` and `;` need quotes. In bash, `!` also triggers history expansion. A password starting with `-` should be passed after `--`, for example `python make_password.py -- "-secret"`.
+- **Shell history keeps the password.** Clear it afterwards if that matters.
+- **This is obfuscation, not strong protection.** Shuffling the byte order only makes the key harder to read in the source. Anyone with the compiled binary can extract it. It stops casual unpacking, not a determined attacker.
+- **Non-ASCII passwords are rejected**, and so are passwords longer than 64 characters.
+- **Control characters:** the script doesn't escape them, only `'` and `\`. Avoid them.
+
+## Troubleshooting
+
+| Message | Cause |
+|---|---|
+| `Password must be ASCII.` | Non-ASCII characters in the password |
+| `Password longer than 64 characters.` | Shorten it |
+| `Password must be exactly 64 characters.` | `--no-pad` was set and the length isn't 64 |
